@@ -1,15 +1,19 @@
 import React from 'react';
 import './scss/main.scss';
+import Input from './components/Input';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.counter = 0;
-    this.clue = 'Introduce un número y dale a Prueba';
-    this.userNumber = 0;
-    this.randomNumber = this.getRandomNumber(100);
-    console.log('r', this.randomNumber);
+    this.state = {
+      counter: 0,
+      clue: 'Introduce un número y dale a Prueba',
+      userNumber: 0,
+      randomNumber: this.getRandomNumber(100)
+    }
+    
+    console.log('r', this.state.randomNumber);
 
     this.getUserUserNumber = this.getUserUserNumber.bind(this);
     this.checkNumbers = this.checkNumbers.bind(this);
@@ -21,13 +25,15 @@ class App extends React.Component {
   
   getUserUserNumber(event) {
     const value = parseInt(event.currentTarget.value);
-    this.userNumber = value;
+    this.setState({
+      userNumber: value
+    });
   }
 
   checkNumbers() {
-    const userNumber = this.userNumber;
-    const randomNumber = this.randomNumber;
-    let counter = this.counter;
+    const userNumber = this.state.userNumber;
+    const randomNumber = this.state.randomNumber;
+    let counter = this.state.counter;
 
     let result = '';
 
@@ -41,9 +47,11 @@ class App extends React.Component {
       counter++;
     }
 
-    this.clue = result;
-    this.counter = counter;
-    this.forceUpdate();
+    this.setState({
+      clue: result,
+      counter: counter
+    });
+    
   }
 
   render() {
@@ -52,23 +60,16 @@ class App extends React.Component {
         <h1 className = "main__title">
           Adivina el número
         </h1>
-        <p className = "tries_text" >{this.counter}</p>
-        <div className="InputDiv">
-          <label htmlFor = "input" className = "main__subtitle">
-            Introduce aquí tu número.
-          </label>
-          <input
-            type="number"
-            name="input"
-            id="input"
-            className="input"
-            onChange={this.getUserUserNumber}
-          />
-          <button className="btn" onClick={this.checkNumbers}>
-            Prueba
-          </button>
-        </div>
-        <p className="resultText">{this.clue}</p>
+        <p className = "tries_text" >{this.state.counter}</p>
+        
+        <Input 
+          fieldAction={this.getUserUserNumber}
+          buttonAction={this.checkNumbers}
+        />
+
+        
+        
+        <p className="resultText">{this.state.clue}</p>
       </div>
     );
   }
